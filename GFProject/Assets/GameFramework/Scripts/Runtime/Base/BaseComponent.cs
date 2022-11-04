@@ -182,7 +182,6 @@ namespace UnityGameFramework.Runtime
         protected override void Awake()
         {
             base.Awake();
-
             InitVersionHelper();
             InitLogHelper();
             Log.Info("Game Framework Version: {0}", GameFramework.Version.GameFrameworkVersion);
