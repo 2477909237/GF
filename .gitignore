@@ -3,3 +3,6 @@
 /GFProject/Logs
 /GFProject/obj
 /GFProject/Temp
+/Tool/ExportExcell/.cache.meta
+/GFProject/*.sln
+/GFProject/*.csproj
