@@ -1,0 +1,22 @@
+[
+  {
+    "ID": 10001,
+    "Name": "无极剑圣",
+    "Dec": "拿剑的",
+    "HP": 100,
+    "MP": 30,
+    "Attack": 10,
+    "Defensive": 10,
+    "ActorType": 1
+  },
+  {
+    "ID": 10002,
+    "Name": "巫妖王",
+    "Dec": "拿棍子的",
+    "HP": 80,
+    "MP": 50,
+    "Attack": 15,
+    "Defensive": 5,
+    "ActorType": 2
+  }
+]
