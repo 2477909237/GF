@@ -7,6 +7,7 @@
 
 using GameFramework.Resource;
 using System;
+using UnityEngine;
 
 namespace GameFramework
 {

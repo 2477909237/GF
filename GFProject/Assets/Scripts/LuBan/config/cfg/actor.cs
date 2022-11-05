@@ -33,7 +33,7 @@ namespace cfg.cfg
             PostInit();
         }
 
-        public actor Deserializeactor(ByteBuf _buf)
+        public static actor Deserializeactor(ByteBuf _buf)
         {
             return new cfg.actor(_buf);
         }
@@ -90,19 +90,19 @@ namespace cfg.cfg
         {
         }
 
-        // public override string ToString()
-        // {
-        //     return "{ "
-        //     + "ID:" + ID + ","
-        //     + "Name:" + Name + ","
-        //     + "Dec:" + Dec + ","
-        //     + "HP:" + HP + ","
-        //     + "MP:" + MP + ","
-        //     + "Attack:" + Attack + ","
-        //     + "Defensive:" + Defensive + ","
-        //     + "ActorType:" + ActorType + ","
-        //     + "}";
-        // }
+        public override string ToString()
+        {
+            return "{ "
+            + "ID:" + ID + ","
+            + "Name:" + Name + ","
+            + "Dec:" + Dec + ","
+            + "HP:" + HP + ","
+            + "MP:" + MP + ","
+            + "Attack:" + Attack + ","
+            + "Defensive:" + Defensive + ","
+            + "ActorType:" + ActorType + ","
+            + "}";
+        }
 
         public void PostInit()
         {
@@ -118,7 +118,17 @@ namespace cfg.cfg
 
         public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)
         {
-            Deserializeactor(new ByteBuf(dataRowBytes));
+            var _buf = new ByteBuf(dataRowBytes);
+            // for(int n = _buf.ReadSize() ; n > 0 ; --n)
+            // {
+            //     var temp = _buf;
+            //     cfg.actor _v;
+            //     _v = cfg.actor.Deserializeactor(_buf);
+            // }
+            cfg.actor _v = this;
+            _v = cfg.actor.Deserializeactor(new ByteBuf(dataRowBytes, startIndex, length));
+            if (_v == null)
+                return false;
             return true;
         }
 
