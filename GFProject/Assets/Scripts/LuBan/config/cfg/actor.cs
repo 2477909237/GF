@@ -92,6 +92,13 @@ public sealed partial class actor :  Bright.Config.BeanBase
     
     partial void PostInit();
     partial void PostResolve();
+    public override int Id { get; }
+
+    public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)
+    {
+        Deserializeactor(new ByteBuf(dataRowBytes, startIndex, length));
+        return true;
+    }
 }
 
 }
