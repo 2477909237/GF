@@ -24,10 +24,10 @@ public partial class TbActor
         
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
-            cfg.actor _v;
-            _v = cfg.actor.Deserializeactor(_buf);
-            _dataList.Add(_v);
-            _dataMap.Add(_v.ID, _v);
+            // cfg.actor _v;
+            // _v = cfg.actor.Deserializeactor(_buf);
+            // _dataList.Add(_v);
+            // _dataMap.Add(_v.ID, _v);
         }
         PostInit();
     }
