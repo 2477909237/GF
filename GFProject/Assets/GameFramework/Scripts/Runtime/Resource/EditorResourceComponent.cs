@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -925,7 +926,7 @@ namespace UnityGameFramework.Runtime
                 return HasAssetResult.NotExist;
             }
 
-            HasAssetResult result = obj.GetType() == typeof(UnityEditor.DefaultAsset) ? HasAssetResult.BinaryOnDisk : HasAssetResult.AssetOnDisk;
+            HasAssetResult result = obj is DefaultAsset ? HasAssetResult.BinaryOnDisk : HasAssetResult.AssetOnDisk;
             obj = null;
             UnityEditor.EditorUtility.UnloadUnusedAssetsImmediate();
             return result;

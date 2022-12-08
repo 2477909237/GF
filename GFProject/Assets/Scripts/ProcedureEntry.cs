@@ -23,15 +23,18 @@ public class ProcedureEntry : ProcedureBase
     {
         base.OnEnter(procedureOwner);
         GameEntry.GetComponent<EventComponent>().Subscribe(LoadDataTableSuccessEventArgs.EventId, LoadDataSuc);
-        DataTableBase dataTable = GameEntry.GetComponent<DataTableComponent>().CreateDataTable(Type.GetType("cfg.cfg.actor"), "actor");
+        DataTableBase dataTable = GameEntry.GetComponent<DataTableComponent>().CreateDataTable(typeof(actor));
         dataTable.ReadData("Assets/Resources/LocalConfig/cfg_tbactor.bytes");
         
     }
 
     private void LoadDataSuc(object sender, GameEventArgs e)
     {
-        IDataTable<actor> dtMusic = GameEntry.GetComponent<DataTableComponent>().GetDataTable<actor>();
-        Log.Debug(dtMusic.Count);
+        IDataTable<actor> dt = GameEntry.GetComponent<DataTableComponent>().GetDataTable<actor>();
+        foreach (var dActor in dt)
+        {
+            Log.Debug(dActor.ToString());
+        }
     }
 
     protected override void OnUpdate(PrecodureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)

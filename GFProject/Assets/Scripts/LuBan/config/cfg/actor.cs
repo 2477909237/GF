@@ -12,74 +12,56 @@ using UnityGameFramework.Runtime;
 
 namespace cfg.cfg
 {
-    public class actor : Bright.Config.BeanBase
+    public partial class actor : DataRowBase
     {
-
-        public actor()
+        
+        
+        public override int Id
         {
-
+            get => ID;
         }
-
-        public actor(ByteBuf _buf)
-        {
-            ID = _buf.ReadInt();
-            Name = _buf.ReadString();
-            Dec = _buf.ReadString();
-            HP = _buf.ReadInt();
-            MP = _buf.ReadInt();
-            Attack = _buf.ReadInt();
-            Defensive = _buf.ReadInt();
-            ActorType = (cfg.EActorType) _buf.ReadInt();
-            PostInit();
-        }
-
-        public static actor Deserializeactor(ByteBuf _buf)
-        {
-            return new cfg.actor(_buf);
-        }
-
+        
         /// <summary>
         /// id
         /// </summary>
         public int ID { get; private set; }
-        
+
         /// <summary>
         /// 名字
         /// </summary>
         public string Name { get; private set; }
-        
+
         /// <summary>
         /// 背景
         /// </summary>
         public string Dec { get; private set; }
-        
+
         /// <summary>
         /// 血量
         /// </summary>
         public int HP { get; private set; }
-        
+
         /// <summary>
         /// 蓝量
         /// </summary>
         public int MP { get; private set; }
-        
+
         /// <summary>
         /// 攻击力
         /// </summary>
         public int Attack { get; private set; }
-        
+
         /// <summary>
         /// 防御力
         /// </summary>
         public int Defensive { get; private set; }
-        
+
         /// <summary>
         /// 角色类型
         /// </summary>
         public cfg.EActorType ActorType { get; private set; }
-        
+
         public const int __ID__ = 1456815083;
-        public override int GetTypeId() => __ID__;
 
         public void Resolve(Dictionary<string, object> _tables)
         {
@@ -93,48 +75,37 @@ namespace cfg.cfg
         public override string ToString()
         {
             return "{ "
-            + "ID:" + ID + ","
-            + "Name:" + Name + ","
-            + "Dec:" + Dec + ","
-            + "HP:" + HP + ","
-            + "MP:" + MP + ","
-            + "Attack:" + Attack + ","
-            + "Defensive:" + Defensive + ","
-            + "ActorType:" + ActorType + ","
-            + "}";
+                   + "ID:" + ID + ","
+                   + "Name:" + Name + ","
+                   + "Dec:" + Dec + ","
+                   + "HP:" + HP + ","
+                   + "MP:" + MP + ","
+                   + "Attack:" + Attack + ","
+                   + "Defensive:" + Defensive + ","
+                   + "ActorType:" + ActorType + ","
+                   + "}";
         }
 
-        public void PostInit()
+        partial void PostInit();
+        partial void PostResolve();
+        
+        public override bool ParseDataRow(string dataRowString, object userData)
         {
-
-        }
-
-        public void PostResolve()
-        {
-
-        }
-
-        public override int Id { get; }
-
-        public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)
-        {
-            var _buf = new ByteBuf(dataRowBytes);
-            // for(int n = _buf.ReadSize() ; n > 0 ; --n)
-            // {
-            //     var temp = _buf;
-            //     cfg.actor _v;
-            //     _v = cfg.actor.Deserializeactor(_buf);
-            // }
-            cfg.actor _v = this;
-            _v = cfg.actor.Deserializeactor(new ByteBuf(dataRowBytes, startIndex, length));
-            if (_v == null)
-                return false;
             return true;
         }
 
-        public override bool ParseDataRow(string dataRowString, object userData)
+        public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)
         {
-            Deserializeactor(new ByteBuf(System.Text.Encoding.UTF8.GetBytes(dataRowString)));
+            ByteBuf _buf = userData as ByteBuf;
+            ID = _buf.ReadInt();
+            Name = _buf.ReadString();
+            Dec = _buf.ReadString();
+            HP = _buf.ReadInt();
+            MP = _buf.ReadInt();
+            Attack = _buf.ReadInt();
+            Defensive = _buf.ReadInt();
+            ActorType = (cfg.EActorType) _buf.ReadInt();
+            PostInit();
             return true;
         }
     }

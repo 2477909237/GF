@@ -9,8 +9,6 @@ namespace UnityGameFramework.Runtime
         public override bool ReadData(DataTableBase dataTable, string dataTableAssetName, object dataTableAsset, object userData)
         {
             TextAsset asset = dataTableAsset as TextAsset;
-            if (asset == null || asset.bytes == null || asset.bytes.Length <= 0)
-                return false;
             return dataTable.ParseData(asset.bytes, 0, asset.bytes.Length, userData);
         }
 
@@ -32,7 +30,7 @@ namespace UnityGameFramework.Runtime
             {
                 var a = buf.ReaderIndex;
                 
-                var result = dataTable.AddDataRow(dataTableBytes, buf.ReaderIndex, dataTableBytes.Length, userData);
+                var result = dataTable.AddDataRow(dataTableBytes, buf.ReaderIndex, dataTableBytes.Length, buf);
                 // if (!result)
                 //     return false;
             }
