@@ -13,36 +13,16 @@ using System.Collections.Generic;
 /// {{x.escape_comment}}
 /// </summary>
 {{~end~}}
-public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {{x.parent}} {{else}} Bright.Config.BeanBase {{end}}
+public partial class {{name}} : {{if parent_def_type}} {{x.parent}} {{else}} UnityGameFramework.Runtime.DataRowBase {{end}}
 {
-    public {{name}}(ByteBuf _buf) {{if parent_def_type}} : base(_buf) {{end}}
-    {
-        {{~ for field in export_fields ~}}
-        {{cs_deserialize '_buf' field.convention_name field.ctype}}
-        {{~if field.index_field~}}
-        foreach(var _v in {{field.convention_name}})
-        { 
-            {{field.convention_name}}_Index.Add(_v.{{field.index_field.convention_name}}, _v);
-        }
-        {{~end~}}
-        {{~end~}}
-        PostInit();
-    }
 
-    public static {{name}} Deserialize{{name}}(ByteBuf _buf)
-    {
-    {{~if x.is_abstract_type~}}
-        switch (_buf.ReadInt())
+{{~if !x.is_abstract_type~}}
+    public override int Id
         {
-        {{~for child in x.hierarchy_not_abstract_children~}}
-            case {{child.full_name}}.__ID__: return new {{child.full_name}}(_buf);
-        {{~end~}}
-            default: throw new SerializationException();
+            get => {{x.id}};
         }
-    {{~else~}}
-        return new {{x.full_name}}(_buf);
-    {{~end~}}
-    }
+{{~end~}}
+
 
     {{~ for field in export_fields ~}}
 {{~if field.comment != '' ~}}
@@ -65,25 +45,8 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
     {{~end~}}
     {{~end~}}
 
-{{~if !x.is_abstract_type~}}
-    public const int __ID__ = {{x.id}};
-    public override int GetTypeId() => __ID__;
-{{~end~}}
 
-    public {{x.cs_method_modifier}} void Resolve(Dictionary<string, object> _tables)
-    {
-        {{~if parent_def_type~}}
-        base.Resolve(_tables);
-        {{~end~}}
-        {{~ for field in export_fields ~}}
-        {{~if field.gen_ref~}}
-        {{cs_ref_validator_resolve field}}
-        {{~else if field.has_recursive_ref~}}
-        {{cs_recursive_resolve field '_tables'}}
-        {{~end~}}
-        {{~end~}}
-        PostResolve();
-    }
+
 
     public {{x.cs_method_modifier}} void TranslateText(System.Func<string, string, string> translator)
     {
@@ -107,9 +70,42 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
     {{~end~}}
         + "}";
     }
-    
-    partial void PostInit();
-    partial void PostResolve();
+
+    /// <summary>                                       
+    /// 解析数据表行。                                         
+    /// </summary>                                      
+    /// <param name="dataRowString">要解析的数据表行字符串。</param>
+    /// <param name="userData">用户自定义数据。</param>         
+    /// <returns>是否解析数据表行成功。</returns>                  
+    public override bool ParseDataRow(string dataRowString, object userData)
+    {
+        return base.ParseDataRow(dataRowString, userData);
+    }    
+
+    /// <summary>
+    /// 解析数据表行。
+    /// </summary>
+    /// <param name="dataRowBytes">要解析的数据表行二进制流。</param>
+    /// <param name="startIndex">数据表行二进制流的起始位置。</param>
+    /// <param name="length">数据表行二进制流的长度。</param>
+    /// <param name="userData">用户自定义数据。</param>
+    /// <returns>是否解析数据表行成功。</returns>
+    public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)
+    {
+        ByteBuf _buf = userData as ByteBuf;
+        if (_buf == null)
+            return false;
+        {{~ for field in export_fields ~}}
+        {{cs_deserialize '_buf' field.convention_name field.ctype}}
+        {{~if field.index_field~}}
+        foreach(var _v in {{field.convention_name}})
+        { 
+            {{field.convention_name}}_Index.Add(_v.{{field.index_field.convention_name}}, _v);
+        }
+        {{~end~}}
+        {{~end~}}
+        return true;
+    }
 }
 
 {{cs_end_name_space_grace x.namespace_with_top_module}}
