@@ -4,7 +4,7 @@ set define_date_dir=..\..\Common\Defines\__root__.xml
 set input_data_dir=..\..\Common\GameDatas
 set output_data_dir=..\..\Common\Export\Json
 set output_dataBytes_dir=..\..\Common\Export\Bytes
-set output_code_dir=..\..\GFProject\Assets\Scripts\LuBan\config
+set output_code_dir=..\..\GFProject\Assets\Scripts\DataTable
 set output_dataBytes_prodir=..\..\GFProject\Assets\Resources\LocalConfig
 set gen_types=code_cs_unity_bin,data_json
 

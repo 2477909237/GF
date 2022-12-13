@@ -23,11 +23,17 @@ public class ProcedureEntry : ProcedureBase
     {
         base.OnEnter(procedureOwner);
         GameEntry.GetComponent<EventComponent>().Subscribe(LoadDataTableSuccessEventArgs.EventId, LoadDataSuc);
-        DataTableBase dataTable = GameEntry.GetComponent<DataTableComponent>().CreateDataTable(typeof(actor));
-        dataTable.ReadData("Assets/Resources/LocalConfig/cfg_tbactor.bytes");
         
+        Entry.DataTableComponent.LoadDataTable(typeof(actor), "");
+
     }
 
+    private void LoadDataTable(Type type)
+    {
+        DataTableBase dataTable = GameEntry.GetComponent<DataTableComponent>().CreateDataTable(type);
+        dataTable.ReadData("cfg_tbactor");
+    }
+    
     private void LoadDataSuc(object sender, GameEventArgs e)
     {
         IDataTable<actor> dt = GameEntry.GetComponent<DataTableComponent>().GetDataTable<actor>();
